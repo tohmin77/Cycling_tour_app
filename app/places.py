@@ -17,6 +17,8 @@ class Listing:
     lat: float
     lng: float
     ref: dict = field(default_factory=dict)
+    local_name: str | None = None
+    name_note: str | None = None
     photo: str | None = None
     photo_page: str | None = None
 
@@ -50,18 +52,21 @@ def _listings(elements: list[dict], area: str) -> list[tuple[float, Listing]]:
     seen, out = set(), []
     for el in elements:
         tags = el.get("tags", {})
-        name = tags.get("name:en") or tags.get("name")
+        local = tags.get("name")
+        name = tags.get("name:en") or local
         pos = el if "lat" in el else el.get("center")
         if not name or not pos or name in seen:
             continue
         seen.add(name)
         address = _address(tags)
         url = "https://www.google.com/maps/search/?" + urlencode(
-            {"api": 1, "query": f"{name}, {address or area}"}
+            {"api": 1, "query": f"{local or name}, {address or area}"}
         )
         ref = {k: v for k, v in (("wikipedia", tags.get("wikipedia")), ("wikidata", tags.get("wikidata")),
                                  ("commons", tags.get("wikimedia_commons"))) if v}
-        out.append((_score(tags), Listing(name, address, url, pos["lat"], pos["lon"], ref)))
+        listing = Listing(name, address, url, pos["lat"], pos["lon"], ref,
+                          local_name=local if local and local != name else None)
+        out.append((_score(tags), listing))
     return out
 
 

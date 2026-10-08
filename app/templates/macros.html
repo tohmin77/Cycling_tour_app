@@ -7,7 +7,8 @@
     {% if p.photo %}<img class="thumb" src="{{ p.photo }}" alt="{{ p.name }}" loading="lazy" width="88" height="88">
     {% else %}<div class="thumb empty" aria-hidden="true">No photo</div>{% endif %}
     {% endif %}
-    <div class="li-main"><strong>{{ p.name }}</strong>
+    <div class="li-main"><strong>{{ p.name }}</strong>{% if p.name_note %} <span class="note">{{ p.name_note }}</span>{% endif %}
+      {% if p.local_name %}<div class="local">{{ p.local_name }}</div>{% endif %}
       <div class="muted">{{ p.address or "Address not in OpenStreetMap" }}</div>
       {% if show_photos and p.photo and p.photo_page %}<div class="credit"><a href="{{ p.photo_page }}" target="_blank" rel="noopener">Photo: Wikimedia</a></div>{% endif %}</div>
     <a class="btn small" href="{{ p.url }}" target="_blank" rel="noopener">Maps</a>

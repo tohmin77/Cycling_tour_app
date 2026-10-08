@@ -16,6 +16,7 @@ dependencies = [
     "pypdf",
     "anthropic",
     "python-dotenv",
+    "korean-romanizer",
 ]
 
 [project.optional-dependencies]

@@ -217,3 +217,62 @@ def test_similar_rejects_shared_city_word_only():
     assert photos._similar("Cheomseongdae", "Cheomseongdae")
     assert not photos._similar("Totally Different Place", "Gyerim Forest")
     assert not photos._similar("국립부산과학관", "National Science Museum")
+
+
+from app import names
+
+
+def test_is_local_detects_non_latin_only():
+    assert names.is_local("기장향교") and names.is_local("月正橋")
+    assert not names.is_local("Café Münster") and not names.is_local("Bulguksa Temple")
+
+
+def test_places_keeps_local_name_beside_osm_english_name():
+    osm = FakeOsm([el(1, "신해운대횟집", 0, 0, **{"name:en": "Sinhaeundae Fish Restaurant"})])
+    [item] = places.recommend_meal(osm, "lunch", (0.0, 0.0), "Busan")
+    assert item.name == "Sinhaeundae Fish Restaurant" and item.local_name == "신해운대횟집"
+    assert "%EC%8B%A0" in item.url  # the Maps link searches the local name
+
+
+@respx.mock
+def test_english_names_ladder_wikidata_then_wikipedia_then_translation_then_romanization(tmp_path, monkeypatch):
+    respx.get(photos.WIKIDATA_API).mock(return_value=httpx.Response(200, json={"entities": {
+        "Q1": {"labels": {"en": {"value": "Busan National Science Museum"}}}}}))
+    respx.get("https://ko.wikipedia.org/w/api.php").mock(return_value=httpx.Response(200, json={"query": {"pages": [
+        {"title": "월정교", "langlinks": [{"lang": "en", "title": "Woljeonggyo"}]}]}}))
+    calls = []
+
+    def fake_tool_json(system, user, name, schema, max_tokens=0):
+        calls.append(user)
+        return {"names": [{"original": "기장향교", "english": "Gijang Confucian School"},
+                          {"original": "not requested", "english": "Injected"}]}
+
+    monkeypatch.setattr(names, "tool_json", fake_tool_json)
+    osm = make_osm(tmp_path)
+    items = [
+        Listing("국립부산과학관", None, "u", 0, 0, {"wikidata": "Q1"}),
+        Listing("월정교", None, "u", 0, 0, {"wikipedia": "ko:월정교"}),
+        Listing("기장향교", None, "u", 0, 0),
+        Listing("Bulguksa Temple", None, "u", 0, 0),
+    ]
+    names.add_english_names(osm, items, "Busan")
+    assert [i.name for i in items] == [
+        "Busan National Science Museum", "Woljeonggyo", "Gijang Confucian School", "Bulguksa Temple"]
+    assert [i.name_note for i in items] == [None, None, "translated", None]
+    assert [i.local_name for i in items] == ["국립부산과학관", "월정교", "기장향교", None]
+    assert "기장향교" in calls[0] and "월정교" not in calls[0]
+
+    again = [Listing("기장향교", None, "u", 0, 0)]
+    names.add_english_names(osm, again, "Busan")
+    assert again[0].name == "Gijang Confucian School" and len(calls) == 1  # served from cache
+
+
+def test_romanization_fallback_when_no_translation_available(tmp_path, monkeypatch):
+    def no_key(*a, **k):
+        raise ValueError("ANTHROPIC_API_KEY is not set")
+
+    monkeypatch.setattr(names, "tool_json", no_key)
+    items = [Listing("기장 향교", None, "u", 0, 0), Listing("月正橋", None, "u", 0, 0)]
+    names.add_english_names(make_osm(tmp_path), items, "Busan")
+    assert items[0].name == "Gijang Hyanggyo" and items[0].name_note == "romanized"
+    assert items[1].name == "月正橋" and items[1].local_name == "月正橋" and items[1].name_note is None

@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 
 import httpx
 
-from app import photos, places
+from app import names, photos, places
 from app.geo import Point, point_at
 from app.maps import OsmServices
 from app.places import Listing
@@ -97,6 +97,7 @@ def build_day_guide(
 
     if g.route:
         g.pois = attempt("Points of interest", lambda: places.pois_along(osm, g.route.points, area), [])
+        names.add_english_names(osm, g.pois, area)
         photos.attach_photos(osm, g.pois)
 
     return g
