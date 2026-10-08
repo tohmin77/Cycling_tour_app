@@ -276,3 +276,23 @@ def test_romanization_fallback_when_no_translation_available(tmp_path, monkeypat
     names.add_english_names(make_osm(tmp_path), items, "Busan")
     assert items[0].name == "Gijang Hyanggyo" and items[0].name_note == "romanized"
     assert items[1].name == "月正橋" and items[1].local_name == "月正橋" and items[1].name_note is None
+
+
+from app.routes import hotel_links
+
+
+def test_hotel_links_single_and_option_list_with_parenthetical_city():
+    day = make_day(hotel="Gridt Hotel", city="Gyeongju")
+    [(label, url)] = hotel_links(day, "South Korea")
+    assert label == "Gridt Hotel" and url.endswith("query=Gridt+Hotel%2C+Gyeongju%2C+South+Korea")
+
+    two = make_day(hotel="Hyeonpung Prana Hotel (Daegu) / Brown Dot Changnyeong Namji Branch", city="Changnyeong")
+    links = hotel_links(two, "South Korea")
+    assert [l for l, _ in links] == ["Hyeonpung Prana Hotel (Daegu)", "Brown Dot Changnyeong Namji Branch"]
+    assert "query=Hyeonpung+Prana+Hotel%2C+Daegu%2C+South+Korea" in links[0][1]
+    assert "query=Brown+Dot+Changnyeong+Namji+Branch%2C+Changnyeong%2C+South+Korea" in links[1][1]
+
+
+def test_hotel_links_empty_without_hotel():
+    assert hotel_links(make_day(), "South Korea") == []
+    assert hotel_links(make_day(hotel=" / "), "South Korea") == []

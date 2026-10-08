@@ -1,3 +1,4 @@
+import re
 from dataclasses import dataclass
 from urllib.parse import urlencode
 
@@ -56,3 +57,18 @@ def build_day_route(maps: OsmServices, day: Day, country: str) -> DayRoute | Non
         return None
     route = maps.route([s.point for s in stops])
     return DayRoute(route.points, route.distance_m, route.mode, stops, maps_url(stops))
+
+
+def hotel_links(day: Day, country: str) -> list[tuple[str, str]]:
+    """(label, Google Maps search link) per hotel option; options are separated by '/' in the itinerary."""
+    links = []
+    for option in (day.hotel or "").split("/"):
+        option = option.strip()
+        if not option:
+            continue
+        paren = re.search(r"\(([^)]*)\)", option)
+        name = re.sub(r"\s*\([^)]*\)", "", option).strip()
+        place = paren.group(1) if paren else day.city
+        query = f"{name}, {place}, {country}"
+        links.append((option, "https://www.google.com/maps/search/?" + urlencode({"api": 1, "query": query})))
+    return links

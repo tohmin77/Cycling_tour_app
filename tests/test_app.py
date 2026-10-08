@@ -57,6 +57,8 @@ def test_upload_text_then_tabs_and_edit(client):
     route = client.get(trip_url + "/day/1")
     assert route.status_code == 200 and 'name="viewport"' in route.text
     assert 'data-src="' + trip_url + '/day/1/route.part"' in route.text
+    assert 'class="hotel"' in route.text and "query=Hotel+X%2C+Busan%2C+South+Korea" in route.text
+    assert "class=\"hotel\"" not in client.get(trip_url + "/day/1/food").text
     food = client.get(trip_url + "/day/1/food")
     assert food.status_code == 200 and "/food.part" in food.text
 

@@ -81,6 +81,8 @@ def test_build_site_writes_self_contained_relative_pages(osm, tmp_path):
     assert 'src="https://upload.wikimedia.org/busan.jpg"' in route
     assert 'href="food-1.html"' in route and 'href="weather-1.html"' in route and 'href="route-2.html"' in route
     assert "data-src" not in route
+    assert 'class="hotel"' in route and "query=Hotel+X%2C+Busan%2C+South+Korea" in route
+    assert 'class="hotel"' not in (out / "route-2.html").read_text()  # no hotel on departure day
 
 
 @respx.mock

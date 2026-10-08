@@ -18,6 +18,7 @@ from app.maps import OsmServices
 from app.models import Itinerary
 from app.parser import extract_text, parse_itinerary
 from app.photos import region_banner
+from app.routes import hotel_links
 from app.urls import LiveUrls
 from app.weather import period_weather
 
@@ -28,6 +29,7 @@ TRIP_ID = re.compile(r"^[0-9a-f]{32}$")
 app = FastAPI(title="Cycling Tour Companion")
 app.mount("/static", StaticFiles(directory=HERE / "static"), name="static")
 templates = Jinja2Templates(directory=HERE / "templates")
+templates.env.globals["hotel_links"] = hotel_links
 
 
 def get_osm() -> OsmServices:

@@ -22,6 +22,7 @@ from app.guide import build_day_guide
 from app.maps import OsmServices
 from app.models import Itinerary
 from app.photos import region_banner
+from app.routes import hotel_links
 from app.urls import StaticUrls
 from app.weather import period_weather
 
@@ -43,6 +44,7 @@ def build_site(trip: Itinerary, osm: OsmServices, out: Path, today: dt.date | No
     """Render every page into `out` (replacing it). Returns human-readable warnings."""
     today = today or dt.date.today()
     env = Environment(loader=FileSystemLoader(HERE / "templates"), autoescape=True)
+    env.globals["hotel_links"] = hotel_links
     warnings: list[str] = []
 
     try:
