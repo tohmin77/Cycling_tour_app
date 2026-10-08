@@ -5,7 +5,6 @@
   {% if banner %}<img src="{{ banner[0] }}" alt="" width="1000" height="360">{% endif %}
   <div class="banner-text">
     <div class="banner-title">{{ trip.title }}</div>
-    {% if trip.start %}<div class="banner-sub">{{ trip.start.strftime('%-d %b') }} – {{ trip.end.strftime('%-d %b %Y') }}</div>{% endif %}
   </div>
   {% if banner and banner[1] %}<a class="banner-credit" href="{{ banner[1] }}" target="_blank" rel="noopener">Photo: Wikimedia</a>{% endif %}
 </div>
