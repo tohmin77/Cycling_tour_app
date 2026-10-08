@@ -10,9 +10,25 @@ python3 -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 uvicorn app.main:app --reload
 ```
-Open http://127.0.0.1:8000 and either click "Load the Busan 2026 sample" or paste itinerary JSON (format: `samples/busan_2026.json`).
+Open http://127.0.0.1:8000 and either click "Load the Busan 2026 sample" (loads the first tour in `tours/`) or paste itinerary JSON (format: `tours/busan-2026-10-26/itinerary.json`).
 
 Uploading a PDF or pasting itinerary text additionally needs `ANTHROPIC_API_KEY` (copy `.env.example` to `.env`). Without it, use the JSON import.
+
+## One folder per tour, deployable on its own
+```
+tours/
+  busan-2026-10-26/        <destination>-<start date>
+    itinerary.json         source of truth for the tour
+    site/                  generated static guide (commit this)
+```
+Generate or refresh a tour's guide (creates the folder from a new itinerary JSON if needed):
+```
+python -m app.export my-itinerary.json            # new tour -> tours/<slug>/
+python -m app.export tours/busan-2026-10-26       # rebuild an existing tour
+```
+`site/` is plain HTML with relative links (Route, Food, Weather and Apps tabs for every day), so it needs no server: set the deploy root to `tours/<slug>/site` on Vercel, Netlify or GitHub Pages, or open `index.html` through any static file server. Each tour deploys independently of the others.
+
+The weather page is a snapshot from the day you generate it. Until the tour is within 15 days it shows typical conditions; rebuild and recommit closer to departure for the live forecast. Photos, banner and map tiles are loaded from Wikimedia, OpenStreetMap and a CDN when the page opens.
 
 ## Tests
 ```

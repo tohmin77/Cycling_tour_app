@@ -22,3 +22,4 @@
 </section>
 {% endif %}
 {% else %}<p class="warn">Weather is unavailable right now. Try again shortly.</p>{% endif %}
+{% if static and pw %}<p class="muted">Snapshot taken on {{ generated }}. Rebuild the guide closer to the tour to pick up the live forecast.</p>{% endif %}

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0b6b4f">
 <title>{% block title %}Cycling Tour Companion{% endblock %}</title>
-<link rel="stylesheet" href="/static/style.css">
+<link rel="stylesheet" href="{{ u.static('style.css') if u else '/static/style.css' }}">
 {% block head %}{% endblock %}
 </head>
 <body>

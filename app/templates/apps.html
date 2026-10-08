@@ -9,5 +9,6 @@
   </section>
   {% endfor %}
 {% else %}<p class="muted">App suggestions are unavailable right now.</p>{% endif %}
-<p class="muted"><a href="/trip/{{ trip_id }}/edit">Edit parsed itinerary</a> · <a href="/">New itinerary</a></p>
+{% if static %}<p class="muted">Guide generated on {{ generated }}.</p>
+{% else %}<p class="muted"><a href="/trip/{{ trip_id }}/edit">Edit parsed itinerary</a> · <a href="/">New itinerary</a></p>{% endif %}
 {% endblock %}

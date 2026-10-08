@@ -22,6 +22,10 @@ def client(tmp_path, monkeypatch):
     monkeypatch.setattr(config, "TRIPS_DIR", tmp_path / "trips")
     monkeypatch.setattr(config, "CACHE_PATH", tmp_path / "cache.sqlite")
     monkeypatch.setattr(main, "parse_itinerary", lambda text: Itinerary.model_validate(ITIN))
+    tours = tmp_path / "tours"
+    (tours / "demo-2026-10-26").mkdir(parents=True)
+    (tours / "demo-2026-10-26" / "itinerary.json").write_text(__import__("json").dumps(ITIN))
+    monkeypatch.setattr(config, "TOURS_DIR", tours)
     monkeypatch.setattr(main, "region_banner", lambda osm, trip: None)
     monkeypatch.setattr(maps, "NOMINATIM_INTERVAL_S", 0)
     monkeypatch.setattr(maps, "OVERPASS_INTERVAL_S", 0)

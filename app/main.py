@@ -18,6 +18,7 @@ from app.maps import OsmServices
 from app.models import Itinerary
 from app.parser import extract_text, parse_itinerary
 from app.photos import region_banner
+from app.urls import LiveUrls
 from app.weather import period_weather
 
 HERE = Path(__file__).parent
@@ -60,7 +61,8 @@ def tab_page(request: Request, name: str, trip_id: str, trip: Itinerary, tab: st
         banner = region_banner(get_osm(), trip)
     except Exception:
         banner = None
-    return render(request, name, tab=tab, trip=trip, trip_id=trip_id, day=day, banner=banner, **ctx)
+    return render(request, name, tab=tab, trip=trip, trip_id=trip_id, day=day, banner=banner,
+                  u=LiveUrls(trip_id), **ctx)
 
 
 def day_or_first(trip: Itinerary, number: int):
@@ -107,7 +109,10 @@ async def upload(
 
 @app.get("/sample")
 def sample():
-    trip = Itinerary.model_validate_json((HERE.parent / "samples" / "busan_2026.json").read_text())
+    found = sorted(config.TOURS_DIR.glob("*/itinerary.json"))
+    if not found:
+        raise HTTPException(404, "No tours found in the tours folder")
+    trip = Itinerary.model_validate_json(found[0].read_text())
     trip_id = uuid.uuid4().hex
     save_trip(trip_id, trip)
     return RedirectResponse(f"/trip/{trip_id}", status_code=303)

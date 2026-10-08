@@ -4,10 +4,10 @@
 <h1>Where to eat · Day {{ day.number }}</h1>
 <p class="sub">{{ day.title }}</p>
 {% if day.notes and tab == "route" %}<p class="muted">{{ day.notes }}</p>{% endif %}
-<div id="content" data-src="/trip/{{ trip_id }}/day/{{ day.number }}/food.part"></div>
+{% if inline %}<div id="content">{% include "food_part.html" %}</div>{% else %}<div id="content" data-src="{{ u.part('food', day.number) }}"></div>{% endif %}
 {% endblock %}
 {% block scripts %}
 {% if tab == "route" %}<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-<script src="/static/map.js"></script>{% endif %}
-<script src="/static/app.js"></script>
+<script src="{{ u.static('map.js') }}"></script>{% endif %}
+<script src="{{ u.static('app.js') }}"></script>
 {% endblock %}

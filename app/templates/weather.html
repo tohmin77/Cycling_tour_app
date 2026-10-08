@@ -1,6 +1,7 @@
 {% extends "trip_layout.html" %}
 {% block body %}
 <h1>Weather during your tour</h1>
-<div id="content" data-src="/trip/{{ trip_id }}/weather.part"></div>
+{% if inline %}<div id="content">{% include "weather_part.html" %}</div>
+{% else %}<div id="content" data-src="{{ u.part('weather', day.number) }}"></div>{% endif %}
 {% endblock %}
-{% block scripts %}<script src="/static/app.js"></script>{% endblock %}
+{% block scripts %}<script src="{{ u.static('app.js') }}"></script>{% endblock %}
