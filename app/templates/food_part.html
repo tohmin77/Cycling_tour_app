@@ -1,0 +1,5 @@
+{% from "macros.html" import listing %}
+{% for w in g.warnings if "suggestions" in w %}<p class="warn">⚠ {{ w }}</p>{% endfor %}
+<section class="card"><h2>Breakfast</h2><p class="muted">Near the start point</p>{{ listing(g.breakfast) }}</section>
+<section class="card"><h2>Lunch</h2><p class="muted">Near the route around noon</p>{{ listing(g.lunch) }}</section>
+<section class="card"><h2>Dinner</h2><p class="muted">Near the hotel</p>{{ listing(g.dinner) }}</section>

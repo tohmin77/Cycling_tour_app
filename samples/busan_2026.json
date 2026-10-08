@@ -1,0 +1,63 @@
+{
+  "title": "7D6N Korea Brompton Expedition: Busan (26 Oct - 1 Nov 2026)",
+  "country": "South Korea",
+  "days": [
+    {"number": 1, "date": "2026-10-26", "title": "Busan City & Coastal Warm-Up", "is_ride": true, "distance_km": 30,
+     "start_time": "10:00", "hotel": "TT Gupo Hotel", "city": "Busan",
+     "notes": "Arrive 09:00 and set up bikes; check in 15:00. Airport transfer to hotel. No safety vehicle for the city ride.",
+     "stops": [
+       {"name": "Eulsukdo Eco Park, Busan", "kind": "start"},
+       {"name": "Nakdonggang Estuary Certification Centre, Busan", "kind": "checkpoint"},
+       {"name": "Gupo, Busan", "kind": "end"}]},
+    {"number": 2, "date": "2026-10-27", "title": "Haeundae to Ulsan: the coastal ride", "is_ride": true, "distance_km": 70,
+     "hotel": "Ocean Bliss", "city": "Ulsan",
+     "notes": "Ride from hotel with safety vehicle. Final stretch along Taehwagang River is optional.",
+     "stops": [
+       {"name": "Haeundae Beach, Busan", "kind": "start"},
+       {"name": "Cheongsapo, Busan", "kind": "checkpoint"},
+       {"name": "Songjeong Beach, Busan", "kind": "checkpoint"},
+       {"name": "Daebyeon Port, Gijang, Busan", "kind": "checkpoint"},
+       {"name": "Ganjeolgot, Ulsan", "kind": "checkpoint"},
+       {"name": "Jinha Beach, Ulsan", "kind": "checkpoint"},
+       {"name": "Simnidaebat Bamboo Grove, Ulsan", "kind": "end"}]},
+    {"number": 3, "date": "2026-10-28", "title": "Ride: Silla Heritage Discovery Loop", "is_ride": true, "distance_km": 35,
+     "start_time": "10:30", "hotel": "Gridt Hotel", "city": "Gyeongju",
+     "notes": "Breakfast 08:00, checkout 09:00, train to Gyeongju 09:00-10:30, then city cycling.",
+     "stops": [
+       {"name": "Gyeongju Station, Gyeongju", "kind": "start"},
+       {"name": "Hwangnyongsa Temple Site, Gyeongju", "kind": "checkpoint"},
+       {"name": "Cheomseongdae, Gyeongju", "kind": "checkpoint"},
+       {"name": "Daereungwon Tumuli Park, Gyeongju", "kind": "checkpoint"},
+       {"name": "Hwangridan-gil, Gyeongju", "kind": "lunch"},
+       {"name": "Gyerim Forest, Gyeongju", "kind": "checkpoint"},
+       {"name": "Wolseong Palace, Gyeongju", "kind": "checkpoint"},
+       {"name": "Donggung and Wolji, Gyeongju", "kind": "checkpoint"},
+       {"name": "Woljeonggyo Bridge, Gyeongju", "kind": "end"}]},
+    {"number": 4, "date": "2026-10-29", "title": "Ride: Bomun Lake & Bulguksa Scenic Loop", "is_ride": true, "distance_km": 40,
+     "hotel": "Gridt Hotel", "city": "Gyeongju",
+     "notes": "City cycling, no safety vehicle.",
+     "stops": [
+       {"name": "Gyeongju Station, Gyeongju", "kind": "start"},
+       {"name": "Bomun Lake, Gyeongju", "kind": "checkpoint"},
+       {"name": "Bulguksa Temple, Gyeongju", "kind": "checkpoint"},
+       {"name": "Gyeongju Station, Gyeongju", "kind": "end"}]},
+    {"number": 5, "date": "2026-10-30", "title": "Busan City - Seoul - Busan Segment (Nakdong River Bicycle Path)", "is_ride": true,
+     "distance_km": 65, "start_time": "09:00", "city": "Changnyeong",
+     "hotel": "Hyeonpung Prana Hotel (Daegu) / Brown Dot Changnyeong Namji Branch",
+     "notes": "Transfer from hotel to ride start; safety vehicle. Complete ride 16:00, dinner 19:00. The itinerary lists two hotel options and the start point is unclear - check with the operator.",
+     "stops": [
+       {"name": "Mulgeum, Yangsan", "kind": "start"},
+       {"name": "Hwamyeong Ecological Park, Busan", "kind": "checkpoint"},
+       {"name": "Samrak Riverside Sports Park, Busan", "kind": "checkpoint"},
+       {"name": "Eulsukdo, Busan", "kind": "end"}]},
+    {"number": 6, "date": "2026-10-31", "title": "Namji - Busan Hotel", "is_ride": true, "distance_km": 65,
+     "hotel": "TT Gupo Hotel", "city": "Busan",
+     "notes": "Luggage transferred to the end-point hotel. No safety vehicle. Done by lunch.",
+     "stops": [
+       {"name": "Namji, Changnyeong", "kind": "start"},
+       {"name": "Samnangjin, Miryang", "kind": "checkpoint"},
+       {"name": "Wondong, Yangsan", "kind": "checkpoint"},
+       {"name": "Mulgeum, Yangsan", "kind": "end"}]},
+    {"number": 7, "date": "2026-11-01", "title": "Depart for Singapore", "is_ride": false, "city": "Busan", "stops": []}
+  ]
+}

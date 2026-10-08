@@ -1,0 +1,24 @@
+{% if pw %}
+<section class="card">
+  <p class="muted">{{ pw.start.strftime('%-d %b') }} – {{ pw.end.strftime('%-d %b %Y') }} · around {{ region }}</p>
+  <div class="temp">{{ pw.avg_tmin|round|int }}–{{ pw.avg_tmax|round|int }}°C</div>
+  <p class="muted">Typical lows and highs. Coldest morning about {{ pw.tmin|round|int }}°C, warmest afternoon about {{ pw.tmax|round|int }}°C.</p>
+  <div class="wx">
+    <span>Rain likely on about {{ pw.wet_days }} of {{ pw.days|length }} days</span>
+    <span>Total about {{ pw.total_mm|round|int }} mm</span>
+    <span>Wind up to {{ pw.wind_max|round|int }} km/h</span>
+  </div>
+  {% if pw.n_typical and not pw.n_forecast %}
+  <p class="muted">Based on the same dates in the last 3 years. A real forecast appears within 15 days of the tour.</p>
+  {% elif pw.n_typical %}
+  <p class="muted">{{ pw.n_forecast }} day(s) use the live forecast; the other {{ pw.n_typical }} use the last 3 years' typical weather until they come within 15 days.</p>
+  {% else %}<p class="muted">Live forecast.</p>{% endif %}
+</section>
+{% if advice %}
+<section class="card"><h2>What to pack</h2>
+  <strong>Cycling attire</strong><ul>{% for x in advice.attire %}<li>{{ x }}</li>{% endfor %}</ul>
+  {% if advice.extras %}<strong>Bring</strong><ul>{% for x in advice.extras %}<li>{{ x }}</li>{% endfor %}</ul>{% endif %}
+  <strong>Off the bike</strong><ul>{% for x in advice.off_bike %}<li>{{ x }}</li>{% endfor %}</ul>
+</section>
+{% endif %}
+{% else %}<p class="warn">Weather is unavailable right now. Try again shortly.</p>{% endif %}

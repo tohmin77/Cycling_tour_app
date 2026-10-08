@@ -1,0 +1,27 @@
+{% from "macros.html" import listing %}
+{% for w in g.warnings %}<p class="warn">⚠ {{ w }}</p>{% endfor %}
+{% if g.route %}
+<section>
+  <div id="map" role="img" aria-label="Indicative cycling route map"></div>
+  <script type="application/json" id="map-data">{{ g.map_data()|tojson }}</script>
+  <div class="row">
+    <div><strong>About {{ (g.route.distance_m / 1000)|round(1) }} km</strong>
+      {% if g.day.distance_km %}<div class="muted">Itinerary: {{ g.day.distance_km|round|int }} km</div>{% endif %}</div>
+    <a class="btn" href="{{ g.route.maps_url }}" target="_blank" rel="noopener">Open in Google Maps</a>
+  </div>
+  <p class="muted">Indicative route only; follow your guide on the day.</p>
+  <details><summary>{{ g.route.stops|length }} stops</summary>
+    <ol class="stops">{% for s in g.route.stops %}<li>{{ s.name }}</li>{% endfor %}</ol></details>
+</section>
+{% elif g.day.is_ride %}
+<p class="muted">No route could be drawn for this day.</p>
+{% else %}
+<p class="muted">No cycling planned today.</p>
+{% endif %}
+
+{% if g.route %}
+<section>
+  <h2>Sights within 3 km</h2>
+  {{ listing(g.pois, show_photos=True) }}
+</section>
+{% endif %}

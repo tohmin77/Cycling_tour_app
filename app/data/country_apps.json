@@ -1,0 +1,24 @@
+{
+  "_aliases": {"korea": "south korea", "republic of korea": "south korea", "rok": "south korea"},
+  "south korea": {
+    "transport": [
+      {"name": "KakaoMap / Naver Map", "use": "Bus, subway and train routing with live arrivals (Google Maps transit is limited in Korea)"},
+      {"name": "KORAIL Talk", "use": "Book KTX / ITX / Mugunghwa trains, e.g. Busan to Gyeongju"},
+      {"name": "Kakao T", "use": "Taxi hailing; supports foreign cards for registered users"},
+      {"name": "T-money card", "use": "Rechargeable transit card for buses and subways, also usable at convenience stores"}
+    ],
+    "navigation": [
+      {"name": "Naver Map", "use": "Most accurate maps in Korea, English UI, bicycle-path layer"},
+      {"name": "KakaoMap", "use": "Alternative with bike route option"},
+      {"name": "Komoot / Ride with GPS / Strava", "use": "Cycling route guidance and recording; download GPX/offline maps in advance"},
+      {"name": "Papago", "use": "Naver's translator for menus and signs"}
+    ],
+    "payment": [
+      {"name": "Visa / Mastercard credit card", "use": "Accepted almost everywhere; contactless works at most shops"},
+      {"name": "Apple Pay / Google Pay", "use": "Growing acceptance, but not at every merchant; carry a physical card"},
+      {"name": "Kakao Pay / Naver Pay", "use": "Common locally; foreign-card linking is limited, so do not rely on it"},
+      {"name": "Cash (KRW) + T-money", "use": "Needed for some markets and rural stalls; withdraw at convenience-store ATMs (GS25/CU/7-Eleven)"},
+      {"name": "Wise", "use": "Low-fee card and currency exchange for travellers"}
+    ]
+  }
+}

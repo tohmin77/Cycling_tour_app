@@ -1,0 +1,8 @@
+.venv/
+.env
+var/
+__pycache__/
+*.egg-info/
+.DS_Store
+.pytest_cache/
+*.pdf

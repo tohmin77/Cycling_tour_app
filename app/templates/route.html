@@ -1,0 +1,13 @@
+{% extends "trip_layout.html" %}
+{% block head %}{% if tab == "route" %}<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">{% endif %}{% endblock %}
+{% block body %}
+<h1>Day {{ day.number }} · {{ day.date.strftime('%a %-d %b') }}</h1>
+<p class="sub">{{ day.title }}</p>
+{% if day.notes and tab == "route" %}<p class="muted">{{ day.notes }}</p>{% endif %}
+<div id="content" data-src="/trip/{{ trip_id }}/day/{{ day.number }}/route.part"></div>
+{% endblock %}
+{% block scripts %}
+{% if tab == "route" %}<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="/static/map.js"></script>{% endif %}
+<script src="/static/app.js"></script>
+{% endblock %}

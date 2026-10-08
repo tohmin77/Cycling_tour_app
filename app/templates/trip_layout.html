@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}{{ trip.title }}{% endblock %}
+{% block header %}
+<div class="banner">
+  {% if banner %}<img src="{{ banner[0] }}" alt="" width="1000" height="360">{% endif %}
+  <div class="banner-text">
+    <div class="banner-title">{{ trip.title }}</div>
+    {% if trip.start %}<div class="banner-sub">{{ trip.start.strftime('%-d %b') }} – {{ trip.end.strftime('%-d %b %Y') }}</div>{% endif %}
+  </div>
+  {% if banner and banner[1] %}<a class="banner-credit" href="{{ banner[1] }}" target="_blank" rel="noopener">Photo: Wikimedia</a>{% endif %}
+</div>
+{% if tab in ("route", "food") and trip.days %}
+<header class="top">
+  <nav class="chips" aria-label="Tour days">
+    {% for d in trip.days %}
+    <a class="chip{% if d.number == day.number %} on{% endif %}"
+       href="/trip/{{ trip_id }}/day/{{ d.number }}{% if tab == 'food' %}/food{% endif %}">
+      <strong>Day {{ d.number }}</strong><small>{{ d.date.strftime('%-d %b') }}</small></a>
+    {% endfor %}
+  </nav>
+</header>
+{% endif %}
+{% endblock %}
+{% block nav %}
+{% set n = day.number if day else 1 %}
+<nav class="tabbar" aria-label="Sections">
+  <a href="/trip/{{ trip_id }}/day/{{ n }}" class="{{ 'on' if tab == 'route' }}">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>Route</a>
+  <a href="/trip/{{ trip_id }}/day/{{ n }}/food" class="{{ 'on' if tab == 'food' }}">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>Food</a>
+  <a href="/trip/{{ trip_id }}/weather?d={{ n }}" class="{{ 'on' if tab == 'weather' }}">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>Weather</a>
+  <a href="/trip/{{ trip_id }}/apps?d={{ n }}" class="{{ 'on' if tab == 'apps' }}">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>Apps</a>
+</nav>
+{% endblock %}

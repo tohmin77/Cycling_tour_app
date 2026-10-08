@@ -1,0 +1,6 @@
+{% extends "trip_layout.html" %}
+{% block body %}
+<h1>Weather during your tour</h1>
+<div id="content" data-src="/trip/{{ trip_id }}/weather.part"></div>
+{% endblock %}
+{% block scripts %}<script src="/static/app.js"></script>{% endblock %}

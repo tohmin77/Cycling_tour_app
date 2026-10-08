@@ -1,0 +1,13 @@
+{% extends "trip_layout.html" %}
+{% block body %}
+<h1>Apps for {{ trip.country }}</h1>
+{% if apps %}
+  {% if not curated %}<p class="warn">Generated suggestions for this country; verify before relying on them.</p>{% endif %}
+  {% for label, key in (("Public transport", "transport"), ("Navigation", "navigation"), ("Payment", "payment")) %}
+  <section class="card"><h2>{{ label }}</h2>
+    <ul class="list">{% for a in apps[key] %}<li><div class="li-main"><strong>{{ a.name }}</strong><div class="muted">{{ a.use }}</div></div></li>{% endfor %}</ul>
+  </section>
+  {% endfor %}
+{% else %}<p class="muted">App suggestions are unavailable right now.</p>{% endif %}
+<p class="muted"><a href="/trip/{{ trip_id }}/edit">Edit parsed itinerary</a> · <a href="/">New itinerary</a></p>
+{% endblock %}

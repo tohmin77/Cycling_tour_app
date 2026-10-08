@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>Cycling Tour Companion</h1>
+<p class="muted">Upload your tour operator's itinerary to get daily routes, meals, sights, weather and travel apps.</p>
+{% if error %}<p class="warn">{{ error }}</p>{% endif %}
+<form class="card" method="post" action="/upload" enctype="multipart/form-data">
+  <label>Itinerary PDF (max 10 MB)<br><input type="file" name="file" accept="application/pdf"></label>
+  <p class="muted">or paste the itinerary text:</p>
+  <textarea name="text"></textarea><br>
+  <p class="muted">or paste itinerary JSON (no API key needed; format as in <code>samples/busan_2026.json</code>):</p>
+  <textarea name="itinerary_json"></textarea><br>
+  <button type="submit">Build my guide</button>
+</form>
+<p class="muted">PDF and text parsing needs <code>ANTHROPIC_API_KEY</code>. Just reviewing? <a href="/sample">Load the Busan 2026 sample</a>.</p>
+{% endblock %}

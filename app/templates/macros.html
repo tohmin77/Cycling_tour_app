@@ -1,0 +1,18 @@
+{% macro listing(items, show_photos=False) %}
+{% if items %}
+<ul class="list">
+{% for p in items %}
+  <li>
+    {% if show_photos %}
+    {% if p.photo %}<img class="thumb" src="{{ p.photo }}" alt="{{ p.name }}" loading="lazy" width="88" height="88">
+    {% else %}<div class="thumb empty" aria-hidden="true">No photo</div>{% endif %}
+    {% endif %}
+    <div class="li-main"><strong>{{ p.name }}</strong>
+      <div class="muted">{{ p.address or "Address not in OpenStreetMap" }}</div>
+      {% if show_photos and p.photo and p.photo_page %}<div class="credit"><a href="{{ p.photo_page }}" target="_blank" rel="noopener">Photo: Wikimedia</a></div>{% endif %}</div>
+    <a class="btn small" href="{{ p.url }}" target="_blank" rel="noopener">Maps</a>
+  </li>
+{% endfor %}
+</ul>
+{% else %}<p class="muted">No listings found nearby.</p>{% endif %}
+{% endmacro %}

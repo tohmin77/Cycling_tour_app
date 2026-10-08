@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>Edit parsed itinerary</h1>
+<p class="muted">Fix any stop names, dates or distances the parser got wrong.</p>
+{% if error %}<pre class="warn">{{ error }}</pre>{% endif %}
+<form method="post">
+  <textarea name="body">{{ body }}</textarea><br>
+  <button type="submit">Save</button> <a href="/trip/{{ trip_id }}">Cancel</a>
+</form>
+{% endblock %}
