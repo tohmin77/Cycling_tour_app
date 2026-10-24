@@ -51,7 +51,6 @@
           row.querySelector(".r").textContent = (p == null ? "" : Math.round(p) + "% · ") + x.mm.toFixed(1) + " mm";
           row.querySelector(".w").textContent = Math.round(x.w) + " km/h";
           row.querySelector(".a").textContent = attireSummary(Math.min(...x.t), Math.max(...x.t), p, x.mm, x.w);
-          row.querySelector(".src").textContent = "forecast";
           row.classList.remove("typical"); row.classList.add("updated");
         });
         status.textContent = "Updated " + new Date().toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"});

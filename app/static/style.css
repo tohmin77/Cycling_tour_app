@@ -77,10 +77,18 @@ input[type=file] { width:100%; font-size:16px; padding:8px 0; }
 form button { margin-top: 10px; width: 100%; }
 
 .daily { width:100%; border-collapse:collapse; }
-.daily th { text-align:left; font-size:.8rem; color:#666; font-weight:600; }
-.daily th, .daily td { padding:6px 4px; border-bottom:1px solid #eee; }
-.daily .src { display:block; color:#888; }
-.daily tr.typical { color:#666; }
-.daily tr.updated td { background:#f3faf3; }
-.daily .a { font-size:.85rem; min-width:9em; }
-.daily { display:block; overflow-x:auto; }
+.daily th { text-align:left; font-size:.8rem; color:var(--muted); font-weight:600; }
+.daily th, .daily td { padding:6px 4px; border-bottom:1px solid var(--line); vertical-align:top; }
+.daily th:not(:last-child), .daily td:not(:last-child) { width:1%; white-space:nowrap; padding-right:14px; }
+.daily td:last-child { white-space:normal; overflow-wrap:anywhere; }
+.daily .a { font-size:.85rem; line-height:1.3; }
+.daily tr.typical { color:var(--muted); }
+.daily tr.updated td { background:rgba(60,160,80,.12); }
+@media (max-width:640px) {
+  .daily, .daily thead, .daily tbody { display:block; font-size:.85rem; }
+  .daily thead tr, .daily tbody tr { display:grid; grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1.2fr) minmax(0,.9fr); border-bottom:1px solid var(--line); }
+  .daily th, .daily td { border-bottom:0; width:auto !important; padding:6px 4px !important; white-space:normal !important; min-width:0; }
+  .daily th:last-child { display:none; }
+  .daily td.a { grid-column:1 / -1; padding-top:0 !important; padding-bottom:8px !important; }
+  .daily td.a::before { content:"Attire: "; color:var(--muted); }
+}

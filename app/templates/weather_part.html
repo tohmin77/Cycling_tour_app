@@ -7,7 +7,7 @@
     <tbody>
     {% for w in pw.days %}
     <tr data-date="{{ w.date.isoformat() }}" class="{{ 'typical' if w.typical }}">
-      <td>{{ w.date.strftime('%a %-d %b') }}<small class="src">{{ 'typical' if w.typical else 'forecast' }}</small></td>
+      <td>{{ w.date.strftime('%a %-d %b') }}</td>
       <td class="t">{{ w.tmin|round|int }}–{{ w.tmax|round|int }}°C</td>
       <td class="r">{{ w.precip_prob|round|int ~ '% · ' if w.precip_prob is not none }}{{ w.precip_mm|round(1) }} mm</td>
       <td class="w">{{ w.wind_kmh|round|int }} km/h</td>
