@@ -82,3 +82,5 @@ form button { margin-top: 10px; width: 100%; }
 .daily .src { display:block; color:#888; }
 .daily tr.typical { color:#666; }
 .daily tr.updated td { background:#f3faf3; }
+.daily .a { font-size:.85rem; min-width:9em; }
+.daily { display:block; overflow-x:auto; }

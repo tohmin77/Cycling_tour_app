@@ -3,6 +3,21 @@
   const API = "https://api.open-meteo.com/v1/forecast";
   const iso = d => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
 
+  // Mirrors attire_summary() in app/advice.py
+  function attireSummary(tmin, tmax, prob, mm, wind) {
+    const parts = tmax >= 28 ? ["Light short sleeves", "bib shorts"]
+      : tmax >= 20 ? ["Short sleeves", "bib shorts"]
+      : tmax >= 12 ? ["Long sleeves or arm warmers", "knee warmers", "light gloves"]
+      : tmax >= 5 ? ["Thermal jersey", "tights", "warm gloves"]
+      : ["Winter jacket", "tights", "winter gloves"];
+    if (tmin < 8 && tmax >= 12 && tmax < 20) parts.push("thermal base layer for the cold start");
+    if (tmin < 12 && tmax >= 20) parts.push("arm warmers for the start");
+    if ((prob || 0) >= 50 || mm >= 2) parts.push("waterproof jacket");
+    else if ((prob || 0) >= 25) parts.push("rain jacket in the bag");
+    if (wind >= 30) parts.push("windproof layer");
+    return parts.join(", ");
+  }
+
   function refresh(card, button, status) {
     const rows = [...card.querySelectorAll("tr[data-date]")];
     const limit = new Date(); limit.setDate(limit.getDate() + HORIZON);
@@ -35,6 +50,7 @@
           row.querySelector(".t").textContent = Math.round(Math.min(...x.t)) + "–" + Math.round(Math.max(...x.t)) + "°C";
           row.querySelector(".r").textContent = (p == null ? "" : Math.round(p) + "% · ") + x.mm.toFixed(1) + " mm";
           row.querySelector(".w").textContent = Math.round(x.w) + " km/h";
+          row.querySelector(".a").textContent = attireSummary(Math.min(...x.t), Math.max(...x.t), p, x.mm, x.w);
           row.querySelector(".src").textContent = "forecast";
           row.classList.remove("typical"); row.classList.add("updated");
         });

@@ -12,7 +12,7 @@ from pydantic import ValidationError
 from app import config
 from app.apps import apps_for
 from app.cache import Cache
-from app.advice import advise_period
+from app.advice import advise_period, attire_summary
 from app.guide import build_day_guide
 from app.maps import OsmServices
 from app.models import Itinerary
@@ -30,6 +30,7 @@ app = FastAPI(title="Cycling Tour Companion")
 app.mount("/static", StaticFiles(directory=HERE / "static"), name="static")
 templates = Jinja2Templates(directory=HERE / "templates")
 templates.env.globals["hotel_links"] = hotel_links
+templates.env.globals["attire_summary"] = attire_summary
 
 
 def get_osm() -> OsmServices:

@@ -306,3 +306,13 @@ def test_daytime_stats_cover_only_6am_to_10pm():
     day = weather._daytime(data)[dt.date(2026, 10, 26)]
     assert (day["tmin"], day["tmax"]) == (10.0, 10.0)
     assert day["mm"] == 0.5 * 17 and day["wind"] == 22 and day["prob"] == 20
+
+
+def test_attire_summary_scales_with_temperature_rain_and_wind():
+    from app.advice import attire_summary
+    mild = weather.Weather(dt.date(2026, 10, 27), 10, 18, 10, 0, 10, False)
+    assert attire_summary(mild).startswith("Long sleeves or arm warmers")
+    wet = weather.Weather(dt.date(2026, 10, 27), 15, 24, 80, 4, 35, False)
+    out = attire_summary(wet)
+    assert out.startswith("Short sleeves") and "arm warmers for the start" not in out
+    assert "waterproof jacket" in out and "windproof layer" in out

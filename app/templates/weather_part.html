@@ -3,7 +3,7 @@
   <h2>Day by day</h2>
   <p class="muted">Temperatures, rain and wind between 6am and 10pm.</p>
   <table class="daily">
-    <thead><tr><th>Day</th><th>Low–High</th><th>Rain</th><th>Wind</th></tr></thead>
+    <thead><tr><th>Day</th><th>Low–High</th><th>Rain</th><th>Wind</th><th>Suggested attire</th></tr></thead>
     <tbody>
     {% for w in pw.days %}
     <tr data-date="{{ w.date.isoformat() }}" class="{{ 'typical' if w.typical }}">
@@ -11,6 +11,7 @@
       <td class="t">{{ w.tmin|round|int }}–{{ w.tmax|round|int }}°C</td>
       <td class="r">{{ w.precip_prob|round|int ~ '% · ' if w.precip_prob is not none }}{{ w.precip_mm|round(1) }} mm</td>
       <td class="w">{{ w.wind_kmh|round|int }} km/h</td>
+      <td class="a">{{ attire_summary(w) }}</td>
     </tr>
     {% endfor %}
     </tbody>

@@ -15,7 +15,7 @@ import httpx
 from jinja2 import Environment, FileSystemLoader
 
 from app import config
-from app.advice import advise_period
+from app.advice import advise_period, attire_summary
 from app.apps import apps_for
 from app.cache import Cache
 from app.guide import build_day_guide
@@ -45,6 +45,7 @@ def build_site(trip: Itinerary, osm: OsmServices, out: Path, today: dt.date | No
     today = today or dt.date.today()
     env = Environment(loader=FileSystemLoader(HERE / "templates"), autoescape=True)
     env.globals["hotel_links"] = hotel_links
+    env.globals["attire_summary"] = attire_summary
     warnings: list[str] = []
 
     try:

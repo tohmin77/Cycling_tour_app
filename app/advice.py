@@ -47,6 +47,31 @@ def advise(w: Weather) -> Advice:
     return a
 
 
+def attire_summary(w: Weather) -> str:
+    """One-line kit suggestion for a day. Keep in step with attireSummary() in static/weather.js."""
+    if w.tmax >= 28:
+        parts = ["Light short sleeves", "bib shorts"]
+    elif w.tmax >= 20:
+        parts = ["Short sleeves", "bib shorts"]
+    elif w.tmax >= 12:
+        parts = ["Long sleeves or arm warmers", "knee warmers", "light gloves"]
+    elif w.tmax >= 5:
+        parts = ["Thermal jersey", "tights", "warm gloves"]
+    else:
+        parts = ["Winter jacket", "tights", "winter gloves"]
+    if w.tmin < 8 and 12 <= w.tmax < 20:
+        parts.append("thermal base layer for the cold start")
+    if w.tmin < 12 and w.tmax >= 20:
+        parts.append("arm warmers for the start")
+    if (w.precip_prob or 0) >= 50 or w.precip_mm >= 2:
+        parts.append("waterproof jacket")
+    elif (w.precip_prob or 0) >= 25:
+        parts.append("rain jacket in the bag")
+    if w.wind_kmh >= 30:
+        parts.append("windproof layer")
+    return ", ".join(parts)
+
+
 def advise_period(pw: PeriodWeather) -> Advice:
     """Packing advice covering the whole period: average daytime highs, coldest morning, wettest outlook."""
     n = len(pw.days)
