@@ -4,4 +4,5 @@
 {% if inline %}<div id="content">{% include "weather_part.html" %}</div>
 {% else %}<div id="content" data-src="{{ u.part('weather', day.number) }}"></div>{% endif %}
 {% endblock %}
-{% block scripts %}<script src="{{ u.static('app.js') }}"></script>{% endblock %}
+{% block scripts %}<script src="{{ u.static('app.js') }}"></script>
+<script src="{{ u.static('weather.js') }}"></script>{% endblock %}

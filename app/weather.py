@@ -8,6 +8,9 @@ ARCHIVE_URL = "https://archive-api.open-meteo.com/v1/archive"
 FORECAST_HORIZON_DAYS = 15
 TYPICAL_YEARS = 3
 DAILY = "temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max"
+HOURLY = "temperature_2m,precipitation,wind_speed_10m"
+DAY_START_HOUR = 6
+DAY_END_HOUR = 22  # inclusive: the 22:00 reading
 WET_PROB = 50
 WET_MM = 2
 
@@ -32,6 +35,7 @@ class PeriodWeather:
     start: dt.date
     end: dt.date
     days: list[Weather]
+    point: tuple[float, float] | None = None
 
     @property
     def tmin(self) -> float:
@@ -91,30 +95,61 @@ def _runs(dates: list[dt.date]) -> list[tuple[dt.date, dt.date]]:
     return runs
 
 
-def _get_daily(client: httpx.Client, url: str, point, start: dt.date, end: dt.date, extra: str = "") -> dict:
+def _get(client: httpx.Client, url: str, point, start: dt.date, end: dt.date, extra_hourly: str = "") -> dict:
     resp = client.get(url, params={
-        "latitude": point[0], "longitude": point[1], "daily": DAILY + extra,
+        "latitude": point[0], "longitude": point[1], "daily": DAILY + (",precipitation_probability_max" if extra_hourly else ""),
+        "hourly": HOURLY + (("," + extra_hourly) if extra_hourly else ""),
         "start_date": start.isoformat(), "end_date": end.isoformat(), "timezone": "auto",
     })
     resp.raise_for_status()
-    return resp.json().get("daily", {})
+    return resp.json()
+
+
+def _daytime(data: dict) -> dict[dt.date, dict]:
+    """Per-date stats over 06:00-22:00 local time, from the hourly series (empty if absent)."""
+    hourly = data.get("hourly") or {}
+    times = hourly.get("time") or []
+    by_date: dict[dt.date, dict[str, list[float]]] = {}
+    for i, stamp in enumerate(times):
+        day, _, hh = stamp.partition("T")
+        if not DAY_START_HOUR <= int(hh[:2]) <= DAY_END_HOUR:
+            continue
+        bucket = by_date.setdefault(dt.date.fromisoformat(day), {"t": [], "mm": [], "wind": [], "prob": []})
+        for key, col in (("t", "temperature_2m"), ("mm", "precipitation"), ("wind", "wind_speed_10m"),
+                         ("prob", "precipitation_probability")):
+            series = hourly.get(col) or []
+            if i < len(series) and series[i] is not None:
+                bucket[key].append(series[i])
+    return {
+        d: {"tmin": min(b["t"]), "tmax": max(b["t"]), "mm": sum(b["mm"]),
+            "wind": max(b["wind"]) if b["wind"] else 0.0, "prob": max(b["prob"]) if b["prob"] else None}
+        for d, b in by_date.items() if b["t"]
+    }
 
 
 def _forecast_range(client, point, start: dt.date, end: dt.date) -> list[Weather]:
-    daily = _get_daily(client, FORECAST_URL, point, start, end, ",precipitation_probability_max")
+    data = _get(client, FORECAST_URL, point, start, end, "precipitation_probability")
+    daily = data.get("daily", {})
+    day = _daytime(data)
     rows = []
     for i, tmin in enumerate(daily.get("temperature_2m_min") or []):
         tmax = daily["temperature_2m_max"][i]
         if tmin is None or tmax is None:
             continue
+        date = start + dt.timedelta(days=i)
         probs = daily.get("precipitation_probability_max") or []
-        rows.append(Weather(
-            start + dt.timedelta(days=i), tmin, tmax,
+        w = Weather(
+            date, tmin, tmax,
             probs[i] if i < len(probs) else None,
             (daily.get("precipitation_sum") or [0.0] * (i + 1))[i] or 0.0,
             (daily.get("wind_speed_10m_max") or [0.0] * (i + 1))[i] or 0.0,
             typical=False,
-        ))
+        )
+        if date in day:
+            h = day[date]
+            w.tmin, w.tmax, w.precip_mm, w.wind_kmh = h["tmin"], h["tmax"], h["mm"], h["wind"]
+            w.precip_prob = h["prob"] if h["prob"] is not None else w.precip_prob
+        rows.append(w)
     return rows
 
 
@@ -122,12 +157,20 @@ def _typical_range(client, point, start: dt.date, end: dt.date) -> list[Weather]
     n = (end - start).days + 1
     years = []
     for back in range(1, TYPICAL_YEARS + 1):
-        daily = _get_daily(client, ARCHIVE_URL, point,
-                           _same_day_in(start, start.year - back), _same_day_in(end, end.year - back))
+        data = _get(client, ARCHIVE_URL, point,
+                    _same_day_in(start, start.year - back), _same_day_in(end, end.year - back))
+        daily = data.get("daily", {})
         cols = [daily.get(k) or [] for k in
                 ("temperature_2m_min", "temperature_2m_max", "precipitation_sum", "wind_speed_10m_max")]
-        if all(len(c) == n for c in cols):
-            years.append(cols)
+        if not all(len(c) == n for c in cols):
+            continue
+        day = _daytime(data)
+        first = _same_day_in(start, start.year - back)
+        for i in range(n):
+            h = day.get(first + dt.timedelta(days=i))
+            if h:
+                cols[0][i], cols[1][i], cols[2][i], cols[3][i] = h["tmin"], h["tmax"], h["mm"], h["wind"]
+        years.append(cols)
     rows = []
     for i in range(n):
         obs = [(y[0][i], y[1][i], y[2][i] or 0.0, y[3][i] or 0.0) for y in years
@@ -167,4 +210,4 @@ def period_weather(
         if own:
             client.close()
     rows.sort(key=lambda w: w.date)
-    return PeriodWeather(start, end, rows) if rows else None
+    return PeriodWeather(start, end, rows, (point[0], point[1])) if rows else None

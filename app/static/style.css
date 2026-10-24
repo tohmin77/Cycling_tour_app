@@ -75,3 +75,10 @@ textarea { width:100%; min-height: 220px; font: 14px ui-monospace, monospace; ba
            border:1px solid var(--line); border-radius:10px; padding:10px; }
 input[type=file] { width:100%; font-size:16px; padding:8px 0; }
 form button { margin-top: 10px; width: 100%; }
+
+.daily { width:100%; border-collapse:collapse; }
+.daily th { text-align:left; font-size:.8rem; color:#666; font-weight:600; }
+.daily th, .daily td { padding:6px 4px; border-bottom:1px solid #eee; }
+.daily .src { display:block; color:#888; }
+.daily tr.typical { color:#666; }
+.daily tr.updated td { background:#f3faf3; }

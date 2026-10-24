@@ -71,7 +71,7 @@ def test_build_site_writes_self_contained_relative_pages(osm, tmp_path):
     assert {"index.html", "route-1.html", "food-1.html", "weather-1.html", "apps-1.html",
             "route-2.html", "food-2.html", "weather-2.html", "apps-2.html", "static"} <= names
     assert "stale.html" not in names
-    assert {p.name for p in (out / "static").iterdir()} == {"style.css", "app.js", "map.js"}
+    assert {p.name for p in (out / "static").iterdir()} == {"style.css", "app.js", "map.js", "weather.js"}
     assert not any("banner" in w or "Weather" in w for w in warnings)
 
     route = (out / "route-1.html").read_text()
@@ -95,7 +95,7 @@ def test_pages_have_no_absolute_local_links_or_server_dependencies(osm, tmp_path
         assert not re.search(r'(?:href|src)="/(?!/)', html), page.name
         assert "/trip/" not in html and "data-src" not in html, page.name
     weather = (out / "weather-2.html").read_text()
-    assert "9–18°C" in weather and "Snapshot taken on 8 Oct 2026" in weather
+    assert "9–18°C" in weather and "Refresh forecast" in weather and "weather.js" in weather and "Snapshot taken on 8 Oct 2026" in weather
     apps = (out / "apps-1.html").read_text()
     assert "Apps for South Korea" in apps and "Guide generated on 8 Oct 2026" in apps and "Edit parsed" not in apps
     assert "No cycling planned today" in (out / "route-2.html").read_text()

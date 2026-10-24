@@ -1,4 +1,26 @@
 {% if pw %}
+<section class="card" id="daily" data-lat="{{ pw.point[0] if pw.point }}" data-lng="{{ pw.point[1] if pw.point }}">
+  <h2>Day by day</h2>
+  <p class="muted">Temperatures, rain and wind between 6am and 10pm.</p>
+  <table class="daily">
+    <thead><tr><th>Day</th><th>Low–High</th><th>Rain</th><th>Wind</th></tr></thead>
+    <tbody>
+    {% for w in pw.days %}
+    <tr data-date="{{ w.date.isoformat() }}" class="{{ 'typical' if w.typical }}">
+      <td>{{ w.date.strftime('%a %-d %b') }}<small class="src">{{ 'typical' if w.typical else 'forecast' }}</small></td>
+      <td class="t">{{ w.tmin|round|int }}–{{ w.tmax|round|int }}°C</td>
+      <td class="r">{{ w.precip_prob|round|int ~ '% · ' if w.precip_prob is not none }}{{ w.precip_mm|round(1) }} mm</td>
+      <td class="w">{{ w.wind_kmh|round|int }} km/h</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  <p class="muted">Forecast: Open-Meteo, which blends national weather-service models (NOAA, DWD, ECMWF and others). Days more than 15 days away show the last 3 years' typical weather.</p>
+  <button type="button" id="refresh-wx">Refresh forecast</button>
+  <span class="muted" id="wx-status"></span>
+</section>
+{% endif %}
+{% if pw %}
 <section class="card">
   <p class="muted">{{ pw.start.strftime('%-d %b') }} – {{ pw.end.strftime('%-d %b %Y') }} · around {{ region }}</p>
   <div class="temp">{{ pw.avg_tmin|round|int }}–{{ pw.avg_tmax|round|int }}°C</div>
@@ -22,4 +44,4 @@
 </section>
 {% endif %}
 {% else %}<p class="warn">Weather is unavailable right now. Try again shortly.</p>{% endif %}
-{% if static and pw %}<p class="muted">Snapshot taken on {{ generated }}. Rebuild the guide closer to the tour to pick up the live forecast.</p>{% endif %}
+{% if static and pw %}<p class="muted">Snapshot taken on {{ generated }}. Tap "Refresh forecast" for the latest numbers.</p>{% endif %}

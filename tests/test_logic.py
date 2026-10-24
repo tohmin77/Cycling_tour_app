@@ -296,3 +296,13 @@ def test_hotel_links_single_and_option_list_with_parenthetical_city():
 def test_hotel_links_empty_without_hotel():
     assert hotel_links(make_day(), "South Korea") == []
     assert hotel_links(make_day(hotel=" / "), "South Korea") == []
+
+
+def test_daytime_stats_cover_only_6am_to_10pm():
+    times = [f"2026-10-26T{h:02d}:00" for h in range(24)]
+    temps = [1.0] * 6 + [10.0] * 17 + [30.0]  # hours 0-5 cold, 6-22 mild, 23 hot
+    data = {"hourly": {"time": times, "temperature_2m": temps, "precipitation": [0.5] * 24,
+                       "wind_speed_10m": list(range(24)), "precipitation_probability": [20] * 24}}
+    day = weather._daytime(data)[dt.date(2026, 10, 26)]
+    assert (day["tmin"], day["tmax"]) == (10.0, 10.0)
+    assert day["mm"] == 0.5 * 17 and day["wind"] == 22 and day["prob"] == 20

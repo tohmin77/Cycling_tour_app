@@ -22,28 +22,90 @@
 <main>
 <h1>Weather during your tour</h1>
 <div id="content">
+<section class="card" id="daily" data-lat="35.1799528" data-lng="129.0752365">
+  <h2>Day by day</h2>
+  <p class="muted">Temperatures, rain and wind between 6am and 10pm.</p>
+  <table class="daily">
+    <thead><tr><th>Day</th><th>Low–High</th><th>Rain</th><th>Wind</th></tr></thead>
+    <tbody>
+    
+    <tr data-date="2026-10-26" class="">
+      <td>Mon 26 Oct<small class="src">forecast</small></td>
+      <td class="t">16–20°C</td>
+      <td class="r">84% · 0.0 mm</td>
+      <td class="w">20 km/h</td>
+    </tr>
+    
+    <tr data-date="2026-10-27" class="">
+      <td>Tue 27 Oct<small class="src">forecast</small></td>
+      <td class="t">10–18°C</td>
+      <td class="r">0% · 0.0 mm</td>
+      <td class="w">22 km/h</td>
+    </tr>
+    
+    <tr data-date="2026-10-28" class="">
+      <td>Wed 28 Oct<small class="src">forecast</small></td>
+      <td class="t">3–15°C</td>
+      <td class="r">0% · 0.0 mm</td>
+      <td class="w">8 km/h</td>
+    </tr>
+    
+    <tr data-date="2026-10-29" class="">
+      <td>Thu 29 Oct<small class="src">forecast</small></td>
+      <td class="t">6–14°C</td>
+      <td class="r">16% · 0.3 mm</td>
+      <td class="w">6 km/h</td>
+    </tr>
+    
+    <tr data-date="2026-10-30" class="">
+      <td>Fri 30 Oct<small class="src">forecast</small></td>
+      <td class="t">12–20°C</td>
+      <td class="r">33% · 0.0 mm</td>
+      <td class="w">15 km/h</td>
+    </tr>
+    
+    <tr data-date="2026-10-31" class="">
+      <td>Sat 31 Oct<small class="src">forecast</small></td>
+      <td class="t">8–19°C</td>
+      <td class="r">6% · 0.0 mm</td>
+      <td class="w">13 km/h</td>
+    </tr>
+    
+    <tr data-date="2026-11-01" class="">
+      <td>Sun 1 Nov<small class="src">forecast</small></td>
+      <td class="t">7–10°C</td>
+      <td class="r">5% · 0.1 mm</td>
+      <td class="w">7 km/h</td>
+    </tr>
+    
+    </tbody>
+  </table>
+  <p class="muted">Forecast: Open-Meteo, which blends national weather-service models (NOAA, DWD, ECMWF and others). Days more than 15 days away show the last 3 years' typical weather.</p>
+  <button type="button" id="refresh-wx">Refresh forecast</button>
+  <span class="muted" id="wx-status"></span>
+</section>
+
+
 <section class="card">
   <p class="muted">26 Oct – 1 Nov 2026 · around Busan</p>
-  <div class="temp">9–19°C</div>
-  <p class="muted">Typical lows and highs. Coldest morning about 7°C, warmest afternoon about 21°C.</p>
+  <div class="temp">9–17°C</div>
+  <p class="muted">Typical lows and highs. Coldest morning about 3°C, warmest afternoon about 20°C.</p>
   <div class="wx">
     <span>Rain likely on about 1 of 7 days</span>
-    <span>Total about 17 mm</span>
-    <span>Wind up to 20 km/h</span>
+    <span>Total about 0 mm</span>
+    <span>Wind up to 22 km/h</span>
   </div>
-  
-  <p class="muted">Based on the same dates in the last 3 years. A real forecast appears within 15 days of the tour.</p>
-  
+  <p class="muted">Live forecast.</p>
 </section>
 
 <section class="card"><h2>What to pack</h2>
   <strong>Cycling attire</strong><ul><li>Long-sleeve jersey or short sleeves with arm warmers</li><li>Padded shorts with knee warmers or tights</li><li>Light full-finger gloves</li></ul>
-  <strong>Bring</strong><ul><li>Thermal base layer and warm gloves for the coldest mornings</li><li>Waterproof packable jacket</li><li>Waterproof shoe covers</li><li>Clear or tinted glasses for spray</li><li>Be careful on wet metal, paint and leaves; brake early</li></ul>
+  <strong>Bring</strong><ul><li>Thermal base layer and warm gloves for the coldest mornings</li></ul>
   <strong>Off the bike</strong><ul><li>Comfortable shoes for walking sites</li><li>Light jacket or fleece for the evening</li></ul>
 </section>
 
 
-<p class="muted">Snapshot taken on 8 Oct 2026. Rebuild the guide closer to the tour to pick up the live forecast.</p></div>
+<p class="muted">Snapshot taken on 24 Oct 2026. Tap "Refresh forecast" for the latest numbers.</p></div>
 
 </main>
 
@@ -60,5 +122,6 @@
 </nav>
 
 <script src="static/app.js"></script>
+<script src="static/weather.js"></script>
 </body>
 </html>

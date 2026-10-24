@@ -27,7 +27,7 @@ from app.urls import StaticUrls
 from app.weather import period_weather
 
 HERE = Path(__file__).parent
-ASSETS = ("style.css", "app.js", "map.js")
+ASSETS = ("style.css", "app.js", "map.js", "weather.js")
 
 
 def slugify(text: str) -> str:
